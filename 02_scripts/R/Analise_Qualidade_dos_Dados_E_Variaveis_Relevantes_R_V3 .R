@@ -2,11 +2,6 @@ gc(reset=TRUE)
 
 setwd("/home/ds/git/201907/02_scripts/R/") 
 
-# Instala??o Pacote para Tabelas Otimizadas
-
-install.packages("data.table")
-install.packages("dplyr")
-
 
 # Carregando os pacotes
 
