@@ -1,3 +1,4 @@
+
 --minha primeira query em SQL (DDL)
 
 --minha primeira query util
