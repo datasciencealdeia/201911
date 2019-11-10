@@ -10,7 +10,7 @@ setwd('/home/ds/Documents/')
 
 # Baixando e Instalando Pacotes
 
-install.packages('dplyr') 
+install.packages('CorrMixed')
 
 
 ## Instalar o Pacote 'rmysql' - Como foi, deu certo?
@@ -18,9 +18,11 @@ install.packages('dplyr')
 
 # Chamando os Pacotes
 
-require(dplyr)
+Require(dplyr)
 
-# **** IMPORTANTE - Sempre é necessário iniciar o pacote para pode-lo utilizar!
+library(CorrMixed)
+
+# **** IMPORTANTE - Sempre e necessario iniciar o pacote para pode-lo utilizar!
 
 
 
@@ -149,7 +151,7 @@ y
 
 
 
-# Nao!!!!
+# Esse!!!!
 
 y <- x^2 
 
