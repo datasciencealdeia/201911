@@ -10,10 +10,8 @@ setwd('/home/ds/Documents/')
 
 # Baixando e Instalando Pacotes
 
-install.packages('CorrMixed')
+install.packages('SamplerCompare')
 
-
-## Instalar o Pacote 'rmysql' - Como foi, deu certo?
 
 
 # Chamando os Pacotes
