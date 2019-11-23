@@ -369,7 +369,8 @@ abline(h=mean(riqueza))
 plot(riqueza~area)
 text(79,43,"Ponto Mais Distante >>")
 
-## Agora crie os seu proprio grafico, em 10 minutos, valendo um KitKat ao mais criativo (Na real, qual eu gostar mais...)! 
+## Agora crie os seu proprio grafico, em 10 minutos, valendo um **Kinder B u e n o** ao mais criativo
+## (Na real, qual eu gostar mais...)! 
 
 
 
