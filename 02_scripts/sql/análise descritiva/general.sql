@@ -464,10 +464,37 @@ ORDER BY 2, 5 DESC;
 
 
 
+/* Bora analisar o milho x soja na tabela de NCM x EXPORTACOES em JAN 2018 no MT */
+SELECT
+*
+FROM
+ds_exportacoes d
+INNER JOIN ds_ncm n ON n.co_ncm = d.co_ncm
+WHERE
+d.co_uf='MT'
+and d.co_ncm in ('10059010','12019000')
+and d.ano_mes = 201801;
 
 
+/* DESAFIO KIT KAT
+
+Seu chefinho quer mais uma analise previa dos dados... ele quer saber quais os 5 PAISES 
+(NOME) que mais compraram SOJA, MILHO E CAFE (em toneladas) DO Brasil em 2018
+
+Ex:
+Cafe... China 1.500.000.000
+Cafe... Japao 1.300.000.000
+...
+Milho... Portugal 35.000.000
+...
+Soja... Australia 2.000.000
+....
 
 
+Go Ahead!
+
+10 min
+*/
 
 
 
