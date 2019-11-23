@@ -464,6 +464,14 @@ ORDER BY 2, 5 DESC;
 
 
 
+
+
+
+
+
+
+
+
 /* Bora analisar o milho x soja na tabela de NCM x EXPORTACOES em JAN 2018 no MT */
 SELECT
 *
@@ -475,9 +483,87 @@ d.co_uf='MT'
 and d.co_ncm in ('10059010','12019000')
 and d.ano_mes = 201801;
 
+--EUREKA corrigindo o retorno temos
+(SELECT
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+,TO_CHAR(sum(e.qt_estat), '9G999G999G999G999') as total_toneladas
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+WHERE
+n.co_ncm = '12019000'
+AND e.co_ano between '2014' and '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 3)
+UNION
+(SELECT
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+,TO_CHAR(sum(e.qt_estat)/1000, '9G999G999G999G999') as total_toneladas
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+WHERE
+n.co_ncm = '10059010'
+AND e.co_ano between '2014' and '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 3)
+UNION
+(SELECT
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+,TO_CHAR(sum(e.qt_estat), '9G999G999G999G999') as total_toneladas
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+WHERE
+n.co_ncm = '09011110'
+AND e.co_ano between '2014' and '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,e.co_uf
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 3)
+ORDER BY 1 ASC,4 DESC;
+;
 
-/* DESAFIO KIT KAT
+--Corrigindo a fonte de dados do milho para não apresentar mais este problema do Kg x Ton - UPDATE (DML)
+UPDATE
+ds_exportacoes
+SET
+qt_estat=qt_estat/1000
+WHERE
+co_ncm = '10059010';
+--rollback or commit?
 
+commit;
+
+
+--E indices? Temos? Precisa (DDL)
+CREATE INDEX ON ds_exportacoes (co_ncm);
+
+--DROP INDEX 
+--rollback ou commit?
+
+--Exercicio HOMEWORK
+
+/*
 Seu chefinho quer mais uma analise previa dos dados... ele quer saber quais os 5 PAISES 
 (NOME) que mais compraram SOJA, MILHO E CAFE (em toneladas) DO Brasil em 2018
 
@@ -492,10 +578,127 @@ Soja... Australia 2.000.000
 
 
 Go Ahead!
-
-10 min
 */
 
+((SELECT
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+,TO_CHAR(sum(e.qt_estat), '9G999G999G999G999') as total_toneladas
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+INNER JOIN ds_pais as p ON p.co_pais = e.co_pais
+WHERE
+n.co_ncm = '12019000'
+AND e.co_ano = '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 5)
+UNION
+(SELECT
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+,TO_CHAR(sum(e.qt_estat)/1000, '9G999G999G999G999') as total_toneladas --LEMBRE DE TIRAR DEPOIS DO UPGRADE
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+INNER JOIN ds_pais as p ON p.co_pais = e.co_pais
+WHERE
+n.co_ncm = '10059010'
+AND e.co_ano = '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 5))
+UNION
+(SELECT
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+,TO_CHAR(sum(e.qt_estat), '9G999G999G999G999') as total_toneladas
+FROM
+ds_exportacoes as e
+INNER JOIN ds_ncm as n ON e.co_ncm = n.co_ncm
+INNER JOIN ds_pais as p ON p.co_pais = e.co_pais
+WHERE
+n.co_ncm = '09011110'
+AND e.co_ano = '2018'
+GROUP BY 
+n.co_ncm
+,n.no_ncm_por
+,p.no_pais
+ORDER BY
+sum(e.qt_estat) DESC
+LIMIT 5)
+ORDER BY 1 ASC,4 DESC;
 
+
+------- BONUS ---------
+
+--join de todas as tabelas
+select
+*
+from
+ds_exportacoes e
+,ds_cotacao c
+,ds_ncm n
+,ds_urf u
+,ds_pais p
+,ds_modal m
+where
+e.ano_mes = c.ano_mes
+and e.co_ncm = n.co_ncm
+and e.co_urf = u.co_urf
+and e.co_pais = p.co_pais
+and e.co_modal = m.co_via;
+
+--total de linhas por NCM por ano
+select
+co_ano
+,co_ncm
+,count(*)
+from
+ds_exportacoes
+group by
+co_ano
+,co_ncm
+order by
+co_ano desc;
+
+--Bonus analisando dados duplicados
+select
+co_ncm
+,co_ano
+,co_mes
+,co_pais
+,co_urf
+,co_modal
+,qt_estat
+,vl_fob
+,ano_mes
+,count(*)
+from
+ds_exportacoes
+group by
+co_ncm
+,co_ano
+,co_mes
+,co_pais
+,co_urf
+,co_modal
+,qt_estat
+,vl_fob
+,ano_mes
+having count(*)>1
+order by co_ano desc;
 
 
