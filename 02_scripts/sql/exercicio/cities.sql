@@ -1,18 +1,33 @@
-
 --minha primeira query em SQL (DDL)
+SELECT 'Hello World';
 
 --minha primeira query util
 --city
+select * from city;
 
 --country
+select * from country;
 
 --countrylanguage
+select * from countrylanguage;
 
 --Sera que temos curitiba na base? (Clausula WHERE)
+select * from city where name = 'curitiba';
+select * from city where upper(name) = 'CURITIBA';
+
+select upper('xpTy');
 
 --Sera que temos Brasil? (Clausula WHERE)
+select * from country where upper(name) = 'BRASIL';
+select * from country where upper(name) like 'BRA%';
+select * from country where upper(name) like '%BRA%';
+select * from country where upper(name) like '%BRA';
 
 --Quais todas as cidades do Brasil listadas?
+select * from city where countrycode='BRA';
+
+select * from city inner join country on city.countrycode = country.code where 
+upper(country.name)='BRAZIL'; 
 
 --Quantas cidades do Brasil temos? (COUNT)
 
