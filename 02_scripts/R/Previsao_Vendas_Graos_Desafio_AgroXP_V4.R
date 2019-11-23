@@ -1,16 +1,12 @@
 gc(reset=TRUE)
 
-setwd("/home/ds/git/201907/02_scripts/R/") 
+setwd("/home/ds/Documents/") 
 
 # Carregando os pacotes
 
-library(RMySQL)
 library(dplyr)
 library(data.table)
-library(lattice)
 library(Matrix)
-library(DMwR)
-#install.packages("readxl")
 library(readxl)
 library(corrplot)
 library(stringr)
@@ -144,22 +140,22 @@ plot(milho_st)
 
 ## Gerando os modelos para cada serie
 
-# Arima
+# ARIMA
 
-soja_mod_arima <- auto.arima(soja_st, seasonal = TRUE, stepwise = FALSE, parallel = TRUE)
+soja_mod_ARIMA <- auto.arima(soja_st, seasonal = TRUE, stepwise = FALSE, parallel = TRUE)
 
-cafe_mod_arima <- auto.arima(cafe_st, seasonal = TRUE, stepwise = FALSE, parallel = TRUE)
+cafe_mod_ARIMA <- auto.arima(cafe_st, seasonal = TRUE, stepwise = FALSE, parallel = TRUE)
 
-milho_mod_arima <- auto.arima(milho_st, seasonal = FALSE, stepwise = FALSE, parallel = TRUE)
+milho_mod_ARIMA <- auto.arima(milho_st, seasonal = FALSE, stepwise = FALSE, parallel = TRUE)
 
 
 ## Previsao
 
-soja_prev <- forecast(soja_mod_arima,level = 80, h = 6)
+soja_prev <- forecast(soja_mod_ARIMA,level = 80, h = 6)
 
-cafe_prev <- forecast(cafe_mod_arima,level = 80, h = 6)
+cafe_prev <- forecast(cafe_mod_ARIMA,level = 80, h = 6)
 
-milho_prev <- forecast(milho_mod_arima,level = 80, h = 6)
+milho_prev <- forecast(milho_mod_ARIMA,level = 80, h = 6)
 
 
 
@@ -189,7 +185,7 @@ par(mfrow=c(3, 1))
 
 plot(soja_prev, showgap = FALSE, xlab = 'SOJA')
 
-plot(cafe_prev, showgap = FALSE, xlab = 'CAF?')
+plot(cafe_prev, showgap = FALSE, xlab = 'CAFE')
 
 plot(milho_prev, showgap = FALSE, xlab = 'MILHO')
 
@@ -202,7 +198,7 @@ par(mfrow=c(3, 1))
 
 plot(soja_prev_h, showgap = FALSE, xlab = 'SOJA')
 
-plot(cafe_prev_h, showgap = FALSE, xlab = 'CAF?')
+plot(cafe_prev_h, showgap = FALSE, xlab = 'CAFE')
 
 plot(milho_prev_h, showgap = FALSE, xlab = 'MILHO')
 
@@ -210,21 +206,24 @@ plot(milho_prev_h, showgap = FALSE, xlab = 'MILHO')
 ## Preparacao das infomacoes para validar qual foi o melhor modelo
 
 
-soja_teste$Prev_Arima <- c(soja_prev[["mean"]][1],soja_prev[["mean"]][2])
+soja_teste$Prev_ARIMA <- c(soja_prev[["mean"]][1],soja_prev[["mean"]][2])
 soja_teste$Prev_Hybrid <- c(soja_prev_h[["mean"]][1],soja_prev_h[["mean"]][2])
-soja_teste$MAPE_ARIMA <- abs(soja_teste$Prev_Arima-soja_teste$Toneladas)/soja_teste$Toneladas
+
+soja_teste$MAPE_ARIMA <- abs(soja_teste$Prev_ARIMA-soja_teste$Toneladas)/soja_teste$Toneladas
 soja_teste$MAPE_Hybrid <- abs(soja_teste$Prev_Hybrid-soja_teste$Toneladas)/soja_teste$Toneladas
 
 
-cafe_teste$Prev_Arima <- c(cafe_prev[["mean"]][1],cafe_prev[["mean"]][2])
+cafe_teste$Prev_ARIMA <- c(cafe_prev[["mean"]][1],cafe_prev[["mean"]][2])
 cafe_teste$Prev_Hybrid <- c(cafe_prev_h[["mean"]][1],cafe_prev_h[["mean"]][2])
-cafe_teste$MAPE_ARIMA <- abs(cafe_teste$Prev_Arima-cafe_teste$Toneladas)/cafe_teste$Toneladas
+
+cafe_teste$MAPE_ARIMA <- abs(cafe_teste$Prev_ARIMA-cafe_teste$Toneladas)/cafe_teste$Toneladas
 cafe_teste$MAPE_Hybrid <- abs(cafe_teste$Prev_Hybrid-cafe_teste$Toneladas)/cafe_teste$Toneladas
 
 
-milho_teste$Prev_Arima <- c(milho_prev[["mean"]][1],milho_prev[["mean"]][2])
+milho_teste$Prev_ARIMA <- c(milho_prev[["mean"]][1],milho_prev[["mean"]][2])
 milho_teste$Prev_Hybrid <- c(milho_prev_h[["mean"]][1],milho_prev_h[["mean"]][2])
-milho_teste$MAPE_ARIMA <- abs(milho_teste$Prev_Arima-milho_teste$Toneladas)/milho_teste$Toneladas
+
+milho_teste$MAPE_ARIMA <- abs(milho_teste$Prev_ARIMA-milho_teste$Toneladas)/milho_teste$Toneladas
 milho_teste$MAPE_Hybrid <- abs(milho_teste$Prev_Hybrid-milho_teste$Toneladas)/milho_teste$Toneladas
 
 

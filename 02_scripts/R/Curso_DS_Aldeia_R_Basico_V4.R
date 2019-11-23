@@ -374,7 +374,11 @@ text(79,43,"Ponto Mais Distante >>")
 
 
 
+## Como consultar os detalhes das funcoes e pacotes
 
+??lapply
+
+??`dplyr-package`
 
 
 ## Abrindo numa nova janela
