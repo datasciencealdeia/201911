@@ -2,8 +2,11 @@
 
 ## Como executar os comandos no R por aqui???
 
+# E para ter sorte com a linguagem:
 
-# Comando para setar a pasta onde o R puxara e copiara as informacoes
+print('Hello World')
+
+# Comando para configurar a pasta onde o R puxara e copiara as informacoes
 
 setwd('/home/ds/Documents/')
 
@@ -177,7 +180,7 @@ var(y)
 
 var(x)
 
-# O desvio padrao, maos a obra! Vcs tem 5 minutos!
+# O desvio padrao, maos a obra! Vcs tem 2 minutos!
 
 
 
